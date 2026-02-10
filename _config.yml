@@ -10,7 +10,7 @@ source:           docs
 destination:      _gh_pages
 host:             0.0.0.0
 port:             9001
-url:              https://getbootstrap.com
+url:              https://github.com/tompotri/bootstrap-tri
 baseurl:          /docs/3.4
 encoding:         UTF-8
 exclude:
@@ -23,12 +23,12 @@ plugins:
 # Custom vars
 current_version:  3.4.2
 docs_version:     3.4
-repo:             https://github.com/twbs/bootstrap
+repo:             https://github.com/tompotri/bootstrap-tri
 sass_repo:        https://github.com/twbs/bootstrap-sass
 
 download:
-  source:         https://github.com/twbs/bootstrap/archive/v3.4.2.zip
-  dist:           https://github.com/twbs/bootstrap/releases/download/v3.4.2/bootstrap-3.4.2-dist.zip
+  source:         https://github.com/tompotri/bootstrap-tri/archive/v3.4.2.zip
+  dist:           https://github.com/tompotri/bootstrap-tri/releases/download/v3.4.2/bootstrap-3.4.2-dist.zip
   sass:           https://github.com/twbs/bootstrap-sass/archive/v3.4.2.tar.gz
 
 blog:             https://blog.getbootstrap.com
