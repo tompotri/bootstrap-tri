@@ -6,8 +6,8 @@
 Package.describe({
   name: 'twbs:bootstrap',  // https://atmospherejs.com/twbs/bootstrap
   summary: 'The most popular front-end framework for developing responsive, mobile first projects on the web.',
-  version: '3.4.1',
-  git: 'https://github.com/twbs/bootstrap.git'
+  version: '3.4.2',
+  git: 'https://github.com/tompotri/bootstrap-tri.git'
 });
 
 Package.onUse(function (api) {

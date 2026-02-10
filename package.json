@@ -1,7 +1,7 @@
 {
   "name": "bootstrap",
-  "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
-  "version": "3.4.1",
+  "description": "The most popular front-end framework for developing responsive, mobile first projects on the web. (3.4.2 Tricentis - security patched)",
+  "version": "3.4.2",
   "keywords": [
     "css",
     "less",
@@ -11,7 +11,7 @@
     "framework",
     "web"
   ],
-  "homepage": "https://getbootstrap.com/",
+  "homepage": "https://github.com/tompotri/bootstrap-tri",
   "author": "Twitter, Inc.",
   "scripts": {
     "sri": "node grunt/generate-sri.js",
@@ -25,13 +25,15 @@
   "main": "./dist/js/npm",
   "repository": {
     "type": "git",
-    "url": "https://github.com/twbs/bootstrap.git"
+    "url": "https://github.com/tompotri/bootstrap-tri.git"
   },
   "bugs": {
-    "url": "https://github.com/twbs/bootstrap/issues"
+    "url": "https://github.com/tompotri/bootstrap-tri/issues"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "dompurify": "^3.0.9"
+  },
   "devDependencies": {
     "autoprefixer": "^9.4.7",
     "btoa": "^1.2.1",

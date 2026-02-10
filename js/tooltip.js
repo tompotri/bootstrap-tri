@@ -1,5 +1,5 @@
 /* ========================================================================
- * Bootstrap: tooltip.js v3.4.1
+ * Bootstrap: tooltip.js v3.4.2
  * https://getbootstrap.com/docs/3.4/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
@@ -11,6 +11,10 @@
   'use strict';
 
   var DISALLOWED_ATTRIBUTES = ['sanitize', 'whiteList', 'sanitizeFn']
+
+  // Use DOMPurify for sanitization when available (CVE-2024-6484, CVE-2024-6485, CVE-2025-1647)
+  var DOMPurify = typeof window !== 'undefined' && window.DOMPurify
+  var useDOMPurify = DOMPurify && typeof DOMPurify.sanitize === 'function'
 
   var uriAttrs = [
     'background',
@@ -107,6 +111,10 @@
       return sanitizeFn(unsafeHtml)
     }
 
+    if (useDOMPurify) {
+      return DOMPurify.sanitize(unsafeHtml, { USE_PROFILES: { html: true } })
+    }
+
     // IE 8 and below don't support createHTMLDocument
     if (!document.implementation || !document.implementation.createHTMLDocument) {
       return unsafeHtml
@@ -156,7 +164,7 @@
     this.init('tooltip', element, options)
   }
 
-  Tooltip.VERSION  = '3.4.1'
+  Tooltip.VERSION  = '3.4.2'
 
   Tooltip.TRANSITION_DURATION = 150
 
@@ -216,8 +224,27 @@
     return Tooltip.DEFAULTS
   }
 
+  // Read data options from attributes only to prevent DOM clobbering (CVE-2025-1647)
+  Tooltip.prototype.getDataAttributes = function () {
+    var $el = this.$element
+    var data = {}
+    var dataOptions = ['animation', 'placement', 'selector', 'template', 'trigger', 'title', 'content', 'delay', 'html', 'container', 'sanitize']
+    for (var i = 0; i < dataOptions.length; i++) {
+      var key = dataOptions[i]
+      var attr = key.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '')
+      var val = $el.attr('data-' + attr)
+      if (val !== undefined && val !== null) {
+        if (val === 'true') data[key] = true
+        else if (val === 'false') data[key] = false
+        else if (key === 'delay') data[key] = parseInt(val, 10)
+        else data[key] = val
+      }
+    }
+    return data
+  }
+
   Tooltip.prototype.getOptions = function (options) {
-    var dataAttributes = this.$element.data()
+    var dataAttributes = this.getDataAttributes()
 
     for (var dataAttr in dataAttributes) {
       if (dataAttributes.hasOwnProperty(dataAttr) && $.inArray(dataAttr, DISALLOWED_ATTRIBUTES) !== -1) {
