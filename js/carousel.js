@@ -1,5 +1,5 @@
 /* ========================================================================
- * Bootstrap: carousel.js v3.4.1
+ * Bootstrap: carousel.js v3.4.2
  * https://getbootstrap.com/docs/3.4/javascript/#carousel
  * ========================================================================
  * Copyright 2011-2019 Twitter, Inc.
@@ -9,6 +9,21 @@
 
 +function ($) {
   'use strict';
+
+  // Safe selector pattern: only #id (alphanumeric, hyphen, underscore) to prevent XSS (CVE-2024-6484)
+  var SAFE_SELECTOR = /^#[a-zA-Z][\w-]*$/
+
+  function safeCarouselSelector(selector) {
+    if (typeof selector !== 'string' || !selector) return null
+    var s = selector.replace(/\s/g, '')
+    return SAFE_SELECTOR.test(s) ? s : null
+  }
+
+  function safeSlideIndex(val) {
+    if (val === undefined || val === null || val === '') return undefined
+    var n = parseInt(val, 10)
+    return isNaN(n) ? undefined : n
+  }
 
   // CAROUSEL CLASS DEFINITION
   // =========================
@@ -30,7 +45,7 @@
       .on('mouseleave.bs.carousel', $.proxy(this.cycle, this))
   }
 
-  Carousel.VERSION  = '3.4.1'
+  Carousel.VERSION  = '3.4.2'
 
   Carousel.TRANSITION_DURATION = 600
 
@@ -210,22 +225,24 @@
   var clickHandler = function (e) {
     var $this   = $(this)
     var href    = $this.attr('href')
-    if (href) {
+    if (href && typeof href === 'string') {
       href = href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
     }
+    var targetRaw = $this.attr('data-target') || href
+    var target    = safeCarouselSelector(targetRaw)
+    if (!target) return
 
-    var target  = $this.attr('data-target') || href
     var $target = $(document).find(target)
 
     if (!$target.hasClass('carousel')) return
 
     var options = $.extend({}, $target.data(), $this.data())
-    var slideIndex = $this.attr('data-slide-to')
-    if (slideIndex) options.interval = false
+    var slideIndex = safeSlideIndex($this.attr('data-slide-to'))
+    if (slideIndex !== undefined) options.interval = false
 
     Plugin.call($target, options)
 
-    if (slideIndex) {
+    if (slideIndex !== undefined) {
       $target.data('bs.carousel').to(slideIndex)
     }
 

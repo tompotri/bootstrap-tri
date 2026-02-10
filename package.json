@@ -1,7 +1,7 @@
 {
   "name": "bootstrap",
-  "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
-  "version": "3.4.1",
+  "description": "The most popular front-end framework for developing responsive, mobile first projects on the web. (3.4.2 Tricentis - security patched)",
+  "version": "3.4.2",
   "keywords": [
     "css",
     "less",
@@ -31,7 +31,9 @@
     "url": "https://github.com/twbs/bootstrap/issues"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "dompurify": "^3.0.9"
+  },
   "devDependencies": {
     "autoprefixer": "^9.4.7",
     "btoa": "^1.2.1",

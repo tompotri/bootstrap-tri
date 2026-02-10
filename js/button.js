@@ -1,5 +1,5 @@
 /* ========================================================================
- * Bootstrap: button.js v3.4.1
+ * Bootstrap: button.js v3.4.2
  * https://getbootstrap.com/docs/3.4/javascript/#buttons
  * ========================================================================
  * Copyright 2011-2019 Twitter, Inc.
@@ -10,6 +10,18 @@
 +function ($) {
   'use strict';
 
+  var DOMPurify = typeof window !== 'undefined' && window.DOMPurify
+  var useDOMPurify = DOMPurify && typeof DOMPurify.sanitize === 'function'
+
+  function sanitizeButtonHtml(html) {
+    if (html == null || html === '') return html
+    var str = String(html)
+    if (useDOMPurify) return DOMPurify.sanitize(str, { USE_PROFILES: { html: true } })
+    var div = document.createElement('div')
+    div.textContent = str
+    return div.innerHTML
+  }
+
   // BUTTON PUBLIC CLASS DEFINITION
   // ==============================
 
@@ -19,7 +31,7 @@
     this.isLoading = false
   }
 
-  Button.VERSION  = '3.4.1'
+  Button.VERSION  = '3.4.2'
 
   Button.DEFAULTS = {
     loadingText: 'loading...'
@@ -35,9 +47,12 @@
 
     if (data.resetText == null) $el.data('resetText', $el[val]())
 
+    var text = data[state] == null ? this.options[state] : data[state]
+    if (val === 'html' && text != null) text = sanitizeButtonHtml(text)
+
     // push to event loop to allow forms to submit
     setTimeout($.proxy(function () {
-      $el[val](data[state] == null ? this.options[state] : data[state])
+      $el[val](text)
 
       if (state == 'loadingText') {
         this.isLoading = true
